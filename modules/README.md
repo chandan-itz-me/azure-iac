@@ -38,3 +38,6 @@ The `BEGIN_TF_DOCS` sections are maintained by the `module-docs` GitHub Actions
 workflow. Initialize each module with `terraform init -backend=false`, then run
 `terraform validate`. The root composition additionally requires environment values,
 Azure credentials, and a configured backend for a real plan.
+<!-- BEGIN_TF_DOCS -->
+
+<!-- END_TF_DOCS -->
