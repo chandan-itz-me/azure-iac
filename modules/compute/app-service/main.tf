@@ -36,7 +36,7 @@ resource "azurerm_linux_web_app" "this" {
   }
 
   dynamic "connection_string" {
-    for_each = var.connection_strings
+    for_each = nonsensitive(var.connection_strings)
 
     content {
       name  = connection_string.key
@@ -89,7 +89,7 @@ resource "azurerm_windows_web_app" "this" {
   }
 
   dynamic "connection_string" {
-    for_each = var.connection_strings
+    for_each = nonsensitive(var.connection_strings)
 
     content {
       name  = connection_string.key

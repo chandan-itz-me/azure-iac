@@ -91,7 +91,7 @@ resource "azurerm_container_app" "this" {
   }
 
   dynamic "secret" {
-    for_each = var.secrets
+    for_each = nonsensitive(var.secrets)
 
     content {
       name  = secret.key
