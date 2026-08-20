@@ -68,8 +68,12 @@ resource "azurerm_kubernetes_cluster" "this" {
     }
   }
 
-  key_vault_secrets_provider {
-    secret_rotation_enabled = var.secret_rotation_enabled
+  dynamic "key_vault_secrets_provider" {
+    for_each = var.key_vault_secrets_provider_enabled ? [1] : []
+
+    content {
+      secret_rotation_enabled = var.secret_rotation_enabled
+    }
   }
 
   tags = merge(var.tags, { Name = var.name })

@@ -22,14 +22,10 @@ resource "azurerm_storage_account" "this" {
 
   public_network_access_enabled = var.public_network_access_enabled
 
-  dynamic "network_rules" {
-    for_each = length(var.allowed_ip_rules) > 0 ? [1] : []
-
-    content {
-      default_action = "Deny"
-      bypass         = ["AzureServices"]
-      ip_rules       = var.allowed_ip_rules
-    }
+  network_rules {
+    default_action = "Deny"
+    bypass         = ["AzureServices"]
+    ip_rules       = var.allowed_ip_rules
   }
 
   dynamic "identity" {

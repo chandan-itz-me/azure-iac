@@ -34,9 +34,14 @@ variable "admin_username" {
 }
 
 variable "admin_ssh_public_key" {
-  description = "SSH public key for the admin user. Required for linux VMs when generate_admin_password is false."
+  description = "SSH public key for the admin user. Required for Linux VMs."
   type        = string
   default     = null
+
+  validation {
+    condition     = var.os_type != "linux" || var.admin_ssh_public_key != null
+    error_message = "admin_ssh_public_key is required for Linux VMs."
+  }
 }
 
 variable "admin_password" {

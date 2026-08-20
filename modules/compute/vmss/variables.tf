@@ -23,17 +23,6 @@ variable "os_type" {
   }
 }
 
-variable "orchestration_mode" {
-  description = "Reserved for documentation only. This module implements Uniform orchestration (azurerm_linux/windows_virtual_machine_scale_set). Flexible orchestration requires the separate azurerm_orchestrated_virtual_machine_scale_set resource and is not covered by this module."
-  type        = string
-  default     = "Uniform"
-
-  validation {
-    condition     = var.orchestration_mode == "Uniform"
-    error_message = "orchestration_mode must be \"Uniform\"; Flexible orchestration is not implemented by this module."
-  }
-}
-
 variable "sku" {
   description = "Azure VM size (SKU) used for scale set instances, e.g. Standard_D2s_v5."
   type        = string

@@ -49,7 +49,7 @@ resource "azurerm_linux_virtual_machine" "this" {
   network_interface_ids           = [azurerm_network_interface.this.id]
   zone                            = var.availability_zone
   custom_data                     = var.custom_data
-  disable_password_authentication = var.admin_ssh_public_key != null
+  disable_password_authentication = true
 
   dynamic "admin_ssh_key" {
     for_each = var.admin_ssh_public_key != null ? [var.admin_ssh_public_key] : []
@@ -59,8 +59,6 @@ resource "azurerm_linux_virtual_machine" "this" {
       public_key = admin_ssh_key.value
     }
   }
-
-  admin_password = var.admin_ssh_public_key == null ? coalesce(var.admin_password, try(random_password.this[0].result, null)) : null
 
   os_disk {
     name                   = "${var.name}-osdisk"
