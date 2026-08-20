@@ -1,0 +1,40 @@
+# Local .terraform directories
+**/.terraform/*
+
+# State files - modules should never contain state, but guard anyway
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Variable files that may contain secrets
+*.tfvars
+*.tfvars.json
+!example.tfvars
+!dev.tfvars
+!test.tfvars
+!prod.tfvars
+
+# CLI config
+.terraformrc
+terraform.rc
+
+# Plan output
+*.tfplan
+*.plan
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
