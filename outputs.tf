@@ -49,10 +49,10 @@ output "managed_identity_ids" {
 
 output "managed_identity_principal_ids" {
   description = "Flattened map of reusable user-assigned managed identity principal IDs, keyed as module-key.identity-key."
-  value = merge([
-    for module_key, identity_module in module.managed_identities : {
-      for identity_key, principal_id in identity_module.principal_ids :
-      "${module_key}.${identity_key}" => principal_id
-    }
-  ]...)
+  value       = local.managed_identity_principal_ids
+}
+
+output "workload_identity_principal_ids" {
+  description = "Principal IDs for automatically created workload identities, keyed by workload category and logical name."
+  value       = local.workload_identity_principal_ids
 }

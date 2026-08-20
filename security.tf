@@ -23,7 +23,11 @@ module "role_assignments" {
   for_each = var.role_assignments
   source   = "./modules/security/role-assignment"
 
-  assignments             = each.value.assignments
+  assignments = {
+    for assignment_key, assignment in each.value.assignments : assignment_key => merge(assignment, {
+      principal_id = try(assignment.principal_id, null) != null ? assignment.principal_id : local.workload_identity_principal_ids[assignment.principal_identity_key]
+    })
+  }
   custom_role_definitions = try(each.value.custom_role_definitions, {})
 }
 

@@ -89,8 +89,11 @@ Azure does not use AWS-style trust policies. The equivalent composition is:
 1. Create reusable user-assigned identities through `managed_identities`.
 2. Attach them to supported workloads with `identity_type = "UserAssigned"` and
   `managed_identity_keys = ["identity-module.identity-key"]`.
-3. Grant least-privilege access through `role_assignments`.
-4. Consume `managed_identity_principal_ids` when another module or external system
+3. Grant least-privilege access through `role_assignments`, using
+  `principal_identity_key = "category.logical-name"` for automatically created
+  workload identities.
+4. Consume `workload_identity_principal_ids` or
+  `managed_identity_principal_ids` when another module or external system
   needs the identity object ID.
 
 System-assigned identities remain the default for optional supported workloads. The
