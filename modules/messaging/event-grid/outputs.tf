@@ -23,3 +23,12 @@ output "event_subscription_ids" {
   description = "Map of event subscription name to its ID."
   value       = { for k, v in azurerm_eventgrid_event_subscription.this : k => v.id }
 }
+
+output "identity_principal_id" {
+  description = "Principal ID of the topic or domain managed identity, when identity is enabled."
+  value = try(
+    azurerm_eventgrid_topic.this[0].identity[0].principal_id,
+    azurerm_eventgrid_domain.this[0].identity[0].principal_id,
+    null,
+  )
+}

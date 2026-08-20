@@ -32,3 +32,8 @@ output "sql_container_ids" {
   description = "Map of \"database/container\" name to resource ID."
   value       = { for k, v in azurerm_cosmosdb_sql_container.this : k => v.id }
 }
+
+output "identity_principal_id" {
+  description = "Principal ID of the account managed identity, when identity is enabled."
+  value       = try(azurerm_cosmosdb_account.this.identity[0].principal_id, null)
+}

@@ -14,6 +14,7 @@ module "application_gateways" {
   backend_http_settings = each.value.backend_http_settings
   http_listeners        = each.value.http_listeners
   request_routing_rules = each.value.request_routing_rules
+  identity_ids          = [for key in try(each.value.managed_identity_keys, []) : local.managed_identity_ids[key]]
   tags                  = local.common_tags
 }
 
@@ -39,5 +40,7 @@ module "api_managements" {
   location            = azurerm_resource_group.this.location
   publisher_name      = each.value.publisher_name
   publisher_email     = each.value.publisher_email
+  identity_type       = try(each.value.identity_type, "SystemAssigned")
+  identity_ids        = [for key in try(each.value.managed_identity_keys, []) : local.managed_identity_ids[key]]
   tags                = local.common_tags
 }

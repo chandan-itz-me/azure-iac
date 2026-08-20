@@ -73,7 +73,44 @@ pre-commit run --all-files
 
 ## Root Composition
 
-As with `aws-iac`, the intent is for a consuming repository's root `*.tf` files to be
-ready-to-use callers for these modules, with optional service maps defaulting to `{}`
-so a resource is created only when configured. No root composition exists in this
-repository yet; add one following the same pattern as `aws-iac` when needed.
+The repository root is a complete environment composition. It creates the shared
+resource group, VNet, subnets, application storage, Key Vault, Function App, managed
+identity, and Log Analytics workspace. Optional service maps in `variables.tf` enable
+additional compute, database, messaging, edge, security, observability, storage, and
+state-backend modules without changing the root files.
+
+Replace every `REPLACE_WITH_*` placeholder in the backend and environment files before
+running `terraform init`. Keep credentials and secret values outside Git.
+
+## Managed Identity Pattern
+
+Azure does not use AWS-style trust policies. The equivalent composition is:
+
+1. Create reusable user-assigned identities through `managed_identities`.
+2. Attach them to supported workloads with `identity_type = "UserAssigned"` and
+  `managed_identity_keys = ["identity-module.identity-key"]`.
+3. Grant least-privilege access through `role_assignments`.
+4. Consume `managed_identity_principal_ids` when another module or external system
+  needs the identity object ID.
+
+System-assigned identities remain the default for optional supported workloads. The
+core Function App is explicitly attached to its dedicated user-assigned identity so
+role assignments remain stable if the app is replaced.
+
+## Quality Gates
+
+Local prerequisites are Terraform, TFLint, Trivy, terraform-docs, and pre-commit.
+The workflows run formatting, per-module initialization and validation, TFLint, and
+Trivy. The module-docs workflow injects generated variables, outputs, resources, and
+requirements into every module README after module changes reach `main`.
+
+```text
+terraform fmt -check -recursive
+terraform validate -no-color
+tflint --recursive --config "$(pwd)/.tflint.hcl"
+trivy config modules --severity HIGH,CRITICAL
+pre-commit run --all-files
+```
+
+An authenticated plan, RBAC review, quota check, and remote-state bootstrap are still
+required before a production apply.

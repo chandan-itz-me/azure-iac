@@ -74,6 +74,20 @@ variable "public_network_access_enabled" {
   default     = false
 }
 
+variable "identity" {
+  description = "Optional managed identity configuration for the Cosmos DB account."
+  type = object({
+    type         = string
+    identity_ids = optional(list(string), [])
+  })
+  default = null
+
+  validation {
+    condition     = var.identity == null || contains(["SystemAssigned", "UserAssigned", "SystemAssigned, UserAssigned"], var.identity.type)
+    error_message = "identity.type must be SystemAssigned, UserAssigned or SystemAssigned, UserAssigned."
+  }
+}
+
 variable "automatic_failover_enabled" {
   description = "Whether automatic failover is enabled for the Cosmos DB account."
   type        = bool

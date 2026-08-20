@@ -9,7 +9,11 @@ module "service_bus_namespaces" {
   name                = try(each.value.name, "${var.project_name}-${each.key}")
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  tags                = local.common_tags
+  identity = {
+    type         = try(each.value.identity_type, "SystemAssigned")
+    identity_ids = [for key in try(each.value.managed_identity_keys, []) : local.managed_identity_ids[key]]
+  }
+  tags = local.common_tags
 }
 
 module "event_grids" {
@@ -19,7 +23,11 @@ module "event_grids" {
   name                = try(each.value.name, "${var.project_name}-${each.key}")
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  tags                = local.common_tags
+  identity = {
+    type         = try(each.value.identity_type, "SystemAssigned")
+    identity_ids = [for key in try(each.value.managed_identity_keys, []) : local.managed_identity_ids[key]]
+  }
+  tags = local.common_tags
 }
 
 module "event_hubs" {
@@ -29,5 +37,9 @@ module "event_hubs" {
   name                = try(each.value.name, "${var.project_name}-${each.key}")
   resource_group_name = azurerm_resource_group.this.name
   location            = azurerm_resource_group.this.location
-  tags                = local.common_tags
+  identity = {
+    type         = try(each.value.identity_type, "SystemAssigned")
+    identity_ids = [for key in try(each.value.managed_identity_keys, []) : local.managed_identity_ids[key]]
+  }
+  tags = local.common_tags
 }

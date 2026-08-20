@@ -30,6 +30,15 @@ resource "azurerm_cosmosdb_account" "this" {
 
   is_virtual_network_filter_enabled = var.is_virtual_network_filter_enabled
 
+  dynamic "identity" {
+    for_each = var.identity != null ? [var.identity] : []
+
+    content {
+      type         = identity.value.type
+      identity_ids = identity.value.identity_ids
+    }
+  }
+
   consistency_policy {
     consistency_level       = var.consistency_policy.consistency_level
     max_interval_in_seconds = var.consistency_policy.max_interval_in_seconds

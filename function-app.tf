@@ -10,6 +10,8 @@ module "function_app" {
   location                   = azurerm_resource_group.this.location
   os_type                    = var.function_app_os_type
   sku_name                   = var.function_app_service_plan_sku
+  identity_type              = "UserAssigned"
+  identity_ids               = [module.function_app_identity.identity_ids["function_app"]]
   storage_account_name       = module.storage_account.name
   storage_account_access_key = module.storage_account.primary_access_key
   tags                       = local.common_tags

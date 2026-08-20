@@ -18,3 +18,8 @@ output "primary_connection_string" {
   value       = { for k, v in azurerm_eventhub_authorization_rule.this : k => v.primary_connection_string }
   sensitive   = true
 }
+
+output "identity_principal_id" {
+  description = "Principal ID of the namespace managed identity, when identity is enabled."
+  value       = try(azurerm_eventhub_namespace.this.identity[0].principal_id, null)
+}
